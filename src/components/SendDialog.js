@@ -36,6 +36,7 @@ import {
 import { parseTokenAccountData } from '../utils/tokens/data';
 import { Switch, Tooltip } from '@material-ui/core';
 import { EthFeeEstimate } from './EthFeeEstimate';
+import SwapWormholeDialog from './SwapWormholeDialog';
 
 const WUSDC_MINT = new PublicKey(
   'BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW',
@@ -98,7 +99,12 @@ export default function SendDialog({ open, onClose, publicKey, balanceInfo }) {
           } ${swapCoinInfo.ticker}`}
           key="swap"
           value="swap"
-        />,
+							/>,
+							<Tab
+            label={'Wormhole'}
+            key="wormhole"
+            value="wormhole"
+							/>,
       ]
     }
   }
@@ -159,6 +165,14 @@ export default function SendDialog({ open, onClose, publicKey, balanceInfo }) {
             swapCoinInfo={swapCoinInfo}
             onSubmitRef={onSubmitRef}
             wusdtToSplUsdt
+          />
+        ) : tab === 'wormhole' ? (
+          <SwapWormholeDialog
+            publicKey={publicKey}
+            onClose={onClose}
+            balanceInfo={balanceInfo}
+            swapCoinInfo={swapCoinInfo}
+            onSubmitRef={onSubmitRef}
           />
         ) : (
           <SendSwapDialog
@@ -644,7 +658,7 @@ function useForm(
   };
 }
 
-function balanceAmountToUserAmount(balanceAmount, decimals) {
+export function balanceAmountToUserAmount(balanceAmount, decimals) {
   return (balanceAmount / Math.pow(10, decimals)).toFixed(decimals);
 }
 
